@@ -13,8 +13,9 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.5|^7.0.1",
         "laravel/framework": "^8.0",
-        "laravel/tinker": "^2.0"
-    },
+        "laravel/tinker": "^2.0",
+        "slince/shopify-api-php": "^2.5"
+    },  
     "require-dev": {
         "facade/ignition": "^2.3.6",
         "fzaninotto/faker": "^1.9.1",
