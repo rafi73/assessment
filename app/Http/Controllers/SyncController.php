@@ -9,12 +9,6 @@ use Slince;
 
 class SyncController extends Controller
 {
-    private $credential;
-
-    public function __construct()
-    {
-        if (!Auth::check()) return 'NO';
-    }
     /**
      * Display a listing of the resource.
      *
@@ -79,7 +73,7 @@ class SyncController extends Controller
         ]);
 
         $product = $client->get('products');
-
+        return Response::json($product,  200);
     }
 
     /**
