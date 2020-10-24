@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\sync;
 use Illuminate\Http\Request;
 use Response;
+use Slince;
 
 class SyncController extends Controller
 {
+    private $credential;
+
+    public function __construct()
+    {
+        if (!Auth::check()) return 'NO';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -63,9 +70,16 @@ class SyncController extends Controller
      * @param  \App\Models\sync  $sync
      * @return \Illuminate\Http\Response
      */
-    public function show(sync $sync)
+    public function products()
     {
-        //
+        $credential = new Slince\Shopify\PrivateAppCredential(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_SHARED SECRET'));
+
+        $client = new Slince\Shopify\Client($credential, env('SHOPIFY_STORE_NAME'), [
+            'metaCacheDir' => './tmp' 
+        ]);
+
+        $product = $client->get('products');
+
     }
 
     /**
