@@ -24,7 +24,6 @@ class SyncService implements SyncInterface
         } catch (\Exception $exception) {
             throw new CredentialErrorException($exception);
         }
-
     }
     /**
      * Get all Robots.

@@ -6,6 +6,9 @@ use App\Models\sync;
 use App\Services\SyncService;
 use Illuminate\Http\Request;
 use Response;
+use Carbon\Carbon;
+use File;
+use Storage;
 
 class SyncController extends Controller
 {
@@ -56,8 +59,10 @@ class SyncController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function test()
     {
+        $mytime = Carbon::now();
+        Storage::disk('local')->put('file.txt', $mytime->toDateTimeString());
         return Response::json('test', 403);
     }
 
