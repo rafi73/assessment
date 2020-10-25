@@ -3,12 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\sync;
+use App\Services\SyncService;
 use Illuminate\Http\Request;
 use Response;
-use Slince;
 
 class SyncController extends Controller
 {
+    /**
+     * The robot Service instance.
+     *
+     * @var SyncService
+     */
+    protected $syncService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(SyncService $syncService = null)
+    {
+        $this->syncService = $syncService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -64,14 +80,8 @@ class SyncController extends Controller
      */
     public function products()
     {
-        $credential = new Slince\Shopify\PrivateAppCredential(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_SHARED SECRET'));
-
-        $client = new Slince\Shopify\Client($credential, env('SHOPIFY_STORE_NAME'), [
-            'metaCacheDir' => './tmp',
-        ]);
-
-        $product = $client->get('products');
-        return Response::json($product, 200);
+        $products = $this->syncService->getAll();
+        return Response::json($products, 200);
     }
 
     /**
@@ -82,19 +92,8 @@ class SyncController extends Controller
      */
     public function storeProduct()
     {
-        $credential = new Slince\Shopify\PrivateAppCredential(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_SHARED SECRET'));
-
-        $client = new Slince\Shopify\Client($credential, env('SHOPIFY_STORE_NAME'), [
-            'metaCacheDir' => './tmp',
-        ]);
-
-        $product = $client->getProductManager()->create([
-            "title" => "Burton Custom Freestyle 151",
-            "body_html" => "<strong>Good snowboard!<\/strong>",
-            "vendor" => "Burton",
-            "product_type" => "Snowboard",
-        ]);
-        return Response::json($product,  200);
+        $product = $this->syncService->create([]);
+        return Response::json($product, 200);
     }
 
     /**
