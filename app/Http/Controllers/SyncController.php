@@ -30,10 +30,8 @@ class SyncController extends Controller
             if ($hmac_header != $calculated_hmac) {
                 return Response::json(array('error' => true, 'message' => "invalid secret"), 403);
             }
-        } 
-        else 
-        {
-            return Response::json(array('error' => true, 'message' => "no secret"),  403);
+        } else {
+            return Response::json(array('error' => true, 'message' => "no secret"), 403);
         }
     }
 
@@ -44,7 +42,7 @@ class SyncController extends Controller
      */
     public function index()
     {
-        return Response::json('test',  403);
+        return Response::json('test', 403);
     }
 
     /**
@@ -69,11 +67,11 @@ class SyncController extends Controller
         $credential = new Slince\Shopify\PrivateAppCredential(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_SHARED SECRET'));
 
         $client = new Slince\Shopify\Client($credential, env('SHOPIFY_STORE_NAME'), [
-            'metaCacheDir' => './tmp' 
+            'metaCacheDir' => './tmp',
         ]);
 
         $product = $client->get('products');
-        return Response::json($product,  200);
+        return Response::json($product, 200);
     }
 
     /**
@@ -82,9 +80,21 @@ class SyncController extends Controller
      * @param  \App\Models\sync  $sync
      * @return \Illuminate\Http\Response
      */
-    public function edit(sync $sync)
+    public function storeProduct()
     {
-        //
+        $credential = new Slince\Shopify\PrivateAppCredential(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_SHARED SECRET'));
+
+        $client = new Slince\Shopify\Client($credential, env('SHOPIFY_STORE_NAME'), [
+            'metaCacheDir' => './tmp',
+        ]);
+
+        $product = $client->getProductManager()->create([
+            "title" => "Burton Custom Freestyle 151",
+            "body_html" => "<strong>Good snowboard!<\/strong>",
+            "vendor" => "Burton",
+            "product_type" => "Snowboard",
+        ]);
+        return Response::json($product,  200);
     }
 
     /**
