@@ -52,6 +52,8 @@ class SyncController extends Controller
         // } else {
         //     return Response::json(array('error' => true, 'message' => "no secret"), 403);
         // }
+        $mytime = Carbon::now();
+        Storage::disk('local')->put('file.json', json_encode($request->all()));
 
         $product = $this->syncService->create($request->all());
         return Response::json($product, 200);
