@@ -23,5 +23,5 @@ Route::group(['prefix' => 'v1'], function ($router) {
     Route::post('webhook-product-update', 'App\Http\Controllers\SyncController@productUpdate');
     Route::get('products', 'App\Http\Controllers\SyncController@products');
     Route::post('products', 'App\Http\Controllers\SyncController@storeProduct');
-    Route::post('test-webhook', 'App\Http\Controllers\SyncController@test');
+    Route::post('test-webhook', 'App\Http\Controllers\WebhookController@test');
 });
