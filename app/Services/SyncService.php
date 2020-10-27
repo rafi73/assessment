@@ -19,7 +19,7 @@ class SyncService implements SyncInterface
     {
         try
         {
-            $credential = new Slince\Shopify\PrivateAppCredential(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_SHARED SECRET'));
+            $credential = new Slince\Shopify\PrivateAppCredential(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_SHARED_SECRET'));
             $this->client = new Slince\Shopify\Client($credential, env('SHOPIFY_STORE_NAME'), ['metaCacheDir' => './tmp']);
         } catch (\Exception $exception) {
             throw new CredentialErrorException($exception);
@@ -43,12 +43,17 @@ class SyncService implements SyncInterface
      */
     public function create(array $request)
     {
-        return $this->client->getProductManager()->create([
-            "title" => "Burton Custom Freestyle 151",
-            "body_html" => "<strong>Good snowboard!<\/strong>",
-            "vendor" => "Burton",
-            "product_type" => "Snowboard",
-        ]);
+        //dd($request);
+        // return $this->client->getProductManager()->create([
+        //     "title" => "Burton Custom Freestyle 151",
+        //     "body_html" => "<strong>Good snowboard!<\/strong>",
+        //     "vendor" => "Burton",
+        //     "product_type" => "Snowboard",
+        // ]);
+
+        $product = $this->client->post('products', $request);
+
+        return $product;
     }
 
     /**

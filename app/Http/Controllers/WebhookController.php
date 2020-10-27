@@ -9,8 +9,21 @@ use Storage;
 
 class WebhookController extends Controller
 {
-    public function __construct()
+    /**
+     * The robot Service instance.
+     *
+     * @var SyncService
+     */
+    protected $syncService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(SyncService $syncService = null)
     {
+        $this->syncService = $syncService;
         // define('SHOPIFY_APP_SECRET', env('WEBHOOK_SHARED_SECRET'));
 
         // $hmac_header = $_SERVER['HTTP_X_SHOPIFY_HMAC_SHA256'];
@@ -26,7 +39,7 @@ class WebhookController extends Controller
     }
 
     /**
-     * Catch webhook.
+     * Test webhook.
      *
      * @return \Illuminate\Http\Response
      */
