@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Response;
+use Storage;
+
 class WebhookController extends Controller
 {
     public function __construct()
@@ -11,7 +16,7 @@ class WebhookController extends Controller
         $hmac_header = $_SERVER['HTTP_X_SHOPIFY_HMAC_SHA256'];
         $data = file_get_contents('php://input');
         $verified = verify_webhook($data, $hmac_header);
-        error_log('Webhook verified: ' . var_export($verified, true)); //check error.log to see the result*/
+        error_log('Webhook verified: ' . var_export($verified, true));
     }
 
     public function verify_webhook($data, $hmac_header)
