@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\sync;
 use App\Services\SyncService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Response;
-use Carbon\Carbon;
-use File;
 use Storage;
 
 class SyncController extends Controller
@@ -63,7 +62,7 @@ class SyncController extends Controller
     {
         $mytime = Carbon::now();
         Storage::disk('local')->put('file.txt', $mytime->toDateTimeString());
-        return Response::json('test', 403);
+        return Response::json($mytime->toDateTimeString(), 403);
     }
 
     /**

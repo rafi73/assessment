@@ -20,19 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function ($router) {
     Route::get('test', 'App\Http\Controllers\SyncController@index');
-    // Route::get('chapter-headings/{id}', 'App\Http\Controllers\ChapterHeadingController@show');
-    // Route::post('chapter-headings', 'App\Http\Controllers\ChapterHeadingController@create');
-    // Route::put('chapter-headings/{id}', 'App\Http\Controllers\ChapterHeadingController@update');
-    // Route::delete('chapter-headings/{id}', 'App\Http\Controllers\ChapterHeadingController@delete');
     Route::post('webhook-product-update', 'App\Http\Controllers\SyncController@productUpdate');
     Route::get('products', 'App\Http\Controllers\SyncController@products');
     Route::post('products', 'App\Http\Controllers\SyncController@storeProduct');
-    Route::get('internal', 'App\Http\Controllers\SyncController@test');
-    // Route::get('chapter-headings-front', 'App\Http\Controllers\ChapterHeadingController@getChapterHeadings');
-
-    // Route::get('code-categories', 'App\Http\Controllers\CodeCategoryController@getCodeCategories');
-    // Route::get('suppliers', 'App\Http\Controllers\SupplierController@getSuppliers');
-    // Route::get('countries', 'App\Http\Controllers\CountryController@getCountries');
-    // Route::get('exports/{chapterHeadingId}', 'App\Http\Controllers\ExportController@getExportData');
-    // Route::get('exports-by-country/{chapterHeadingId}/{countryId}', 'App\Http\Controllers\ExportController@getExportDataByCountry');
+    Route::get('test-webhook', 'App\Http\Controllers\SyncController@test');
 });
