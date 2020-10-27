@@ -51,7 +51,7 @@ class SyncService implements SyncInterface
         //     "product_type" => "Snowboard",
         // ]);
 
-        $product = $this->client->post('products', $request);
+        $product = $this->client->post('products', ['product' => $request]);
 
         return $product;
     }
