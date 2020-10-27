@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\sync;
-use App\Services\ProductService;
 use App\Services\InventoryService;
+use App\Services\ProductService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Response;
@@ -19,7 +19,7 @@ class SyncController extends Controller
      */
     protected $productService;
 
-     /**
+    /**
      * The Inventory Service instance.
      *
      * @var InventoryService
@@ -47,7 +47,6 @@ class SyncController extends Controller
         $product = $this->productService->create($request->all());
         return Response::json($product, 200);
     }
-
 
     /**
      * Display a listing of the resource.
@@ -78,18 +77,6 @@ class SyncController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function inventoryItemUpdate(Request $request)
-    {
-        $mytime = Carbon::now();
-        Storage::disk('local')->put('file.json', json_encode($request->all()));
-        return Response::json($request->all(), 403);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -109,7 +96,7 @@ class SyncController extends Controller
      */
     public function store(Request $request)
     {
-        $product = $this->syncService->create($request->all());
+        $product = $this->productService->create($request->all());
         return Response::json($product, 200);
     }
 
@@ -121,7 +108,7 @@ class SyncController extends Controller
      */
     public function products()
     {
-        $products = $this->syncService->getAll();
+        $products = $this->productService->getAll();
         return Response::json($products, 200);
     }
 
@@ -133,7 +120,7 @@ class SyncController extends Controller
      */
     public function storeProduct()
     {
-        $product = $this->syncService->create([]);
+        $product = $this->productService->create([]);
         return Response::json($product, 200);
     }
 
@@ -144,9 +131,11 @@ class SyncController extends Controller
      * @param  \App\Models\sync  $sync
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, sync $sync)
+    public function inventoryLevelUpdate(Request $request)
     {
-        //
+        Storage::disk('local')->put('inventory-level.json', json_encode($request->all()));
+        $product = $this->inventoryService->update([]);
+        return Response::json($product, 200);
     }
 
     /**

@@ -41,8 +41,9 @@ class InventoryService implements SyncInterface
      * @param array $request
      * @return \App\Product
      */
-    public function create(array $request)
+    public function update(array $request)
     {
+        
         $product = $this->client->post('products', ['product' => $request]);
 
         return $product;
@@ -57,19 +58,6 @@ class InventoryService implements SyncInterface
      * @return bool
      */
     public function delete(int $id): bool
-    {
-    }
-
-    /**
-     * Update a Product.
-     *
-     * @param array $request
-     * @param int $id
-     * @throws \App\Exceptions\ProductService\ProductNotFoundException
-     * @throws \App\Exceptions\ProductService\ProductOwnerMismatchedException
-     * @return \App\Product
-     */
-    public function update(array $request)
     {
     }
 
