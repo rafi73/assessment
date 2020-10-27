@@ -17,7 +17,6 @@ class CreateSyncsTable extends Migration
             $table->id();
             $table->string('master_store_product_id');
             $table->string('slave_store_product_id');
-            $table->string('sku');
             $table->timestamps();
         });
     }

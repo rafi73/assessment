@@ -46,14 +46,19 @@ class ProductService implements SyncInterface
     {
         $product = $this->client->post('products', ['product' => $request]);
 
-        foreach ($request['variants'] as $varient) 
-        {
-            $sync = new Sync;
-            $sync->master_store_product_id = $varient['product_id'];
-            $sync->slave_store_product_id = $product['product']['id'];
-            $sync->sku = $varient['sku'];
-            $sync->save();
-        }
+        $sync = new Sync;
+        $sync->master_store_product_id = $request['id'];
+        $sync->slave_store_product_id = $product['product']['id'];
+        $sync->save();
+
+        // foreach ($request['variants'] as $varient)
+        // {
+        //     $sync = new Sync;
+        //     $sync->master_store_product_id = $varient['product_id'];
+        //     $sync->slave_store_product_id = $product['product']['id'];
+        //     $sync->sku = $varient['sku'];
+        //     $sync->save();
+        // }
 
         return $product;
     }
@@ -81,21 +86,19 @@ class ProductService implements SyncInterface
      */
     public function update(array $request)
     {
-        foreach ($request['variants'] as $varient) 
-        {
-            $sync = Sync::where('master_store_product_id', $varient['product_id'])->where('sku', $varient['sku']->get());
-            // $product = $client->put('products/'.$sync->slave_store_product_id, ["product" => 
-            // ]);
-
-            $product = $client->getProductVarientManager()->update(12800, [
-                "title" => "Burton Custom Freestyle 151",
-                "body_html" => "<strong>Good snowboard!<\/strong>",
-                "vendor"=> "Burton",
-                "product_type" => "Snowboard",
-          ]);
-
+        $skus = [];
+        foreach ($request['variants'] as $varient) {
+            $skus[$varient['sku']] = $varient['price'];
         }
-        
+
+        $sync = Sync::where('master_store_product_id', $varient['product_id'])->firstOrFail();
+        $product = $this->client->get('products/' . $sync->slave_store_product_id);
+
+        foreach ($product['product']['variants'] as $varient) {
+            $product = $this->client->getProductVariantManager()->update($varient['id'], [
+                "price" => $skus[$varient['sku']]
+            ]);
+        }
     }
 
     /**

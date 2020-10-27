@@ -13,7 +13,7 @@ interface SyncInterface
 
     public function create(array $request);
 
-    public function update(array $request, int $id);
+    public function update(array $request);
 
     public function delete(int $id);
 }

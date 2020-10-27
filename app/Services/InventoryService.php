@@ -69,7 +69,7 @@ class InventoryService implements SyncInterface
      * @throws \App\Exceptions\ProductService\ProductOwnerMismatchedException
      * @return \App\Product
      */
-    public function update(array $request, int $id)
+    public function update(array $request)
     {
     }
 

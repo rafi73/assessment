@@ -73,7 +73,7 @@ class SyncController extends Controller
         // } else {
         //     return Response::json(array('error' => true, 'message' => "no secret"), 403);
         // }
-        $product = $this->productService->create($request->all());
+        $product = $this->productService->update($request->all());
         return Response::json($product, 200);
     }
 
