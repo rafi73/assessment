@@ -134,7 +134,7 @@ class SyncController extends Controller
     public function inventoryLevelUpdate(Request $request)
     {
         Storage::disk('local')->put('inventory-level.json', json_encode($request->all()));
-        $product = $this->inventoryService->update([]);
+        $product = $this->inventoryService->update($request->all());
         return Response::json($product, 200);
     }
 
