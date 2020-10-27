@@ -6,7 +6,7 @@ use App\Contracts\SyncInterface;
 use App\Exceptions\CredentialErrorException;
 use Slince;
 
-class SyncService implements SyncInterface
+class InventoryService implements SyncInterface
 {
     protected $client;
 
@@ -43,14 +43,6 @@ class SyncService implements SyncInterface
      */
     public function create(array $request)
     {
-        //dd($request);
-        // return $this->client->getProductManager()->create([
-        //     "title" => "Burton Custom Freestyle 151",
-        //     "body_html" => "<strong>Good snowboard!<\/strong>",
-        //     "vendor" => "Burton",
-        //     "product_type" => "Snowboard",
-        // ]);
-
         $product = $this->client->post('products', ['product' => $request]);
 
         return $product;

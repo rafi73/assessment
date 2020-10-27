@@ -15,6 +15,9 @@ class CreateSyncsTable extends Migration
     {
         Schema::create('syncs', function (Blueprint $table) {
             $table->id();
+            $table->string('master_store_product_id');
+            $table->string('slave_store_product_id');
+            $table->string('sku');
             $table->timestamps();
         });
     }

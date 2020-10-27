@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\sync;
-use App\Services\SyncService;
+use App\Services\ProductService;
+use App\Services\InventoryService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Response;
@@ -12,21 +13,41 @@ use Storage;
 class SyncController extends Controller
 {
     /**
-     * The robot Service instance.
+     * The Product Service instance.
      *
-     * @var SyncService
+     * @var ProductService
      */
-    protected $syncService;
+    protected $productService;
+
+     /**
+     * The Inventory Service instance.
+     *
+     * @var InventoryService
+     */
+    protected $inventoryService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(SyncService $syncService = null)
+    public function __construct(ProductService $productService = null, InventoryService $inventoryService = null)
     {
-        $this->syncService = $syncService;
+        $this->productService = $productService;
+        $this->inventoryService = $inventoryService;
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function productCreate(Request $request)
+    {
+        $product = $this->productService->create($request->all());
+        return Response::json($product, 200);
+    }
+
 
     /**
      * Display a listing of the resource.
@@ -52,7 +73,7 @@ class SyncController extends Controller
         // } else {
         //     return Response::json(array('error' => true, 'message' => "no secret"), 403);
         // }
-        $product = $this->syncService->create($request->all());
+        $product = $this->productService->create($request->all());
         return Response::json($product, 200);
     }
 
