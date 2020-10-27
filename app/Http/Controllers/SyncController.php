@@ -61,8 +61,8 @@ class SyncController extends Controller
     public function test(Request $request)
     {
         $mytime = Carbon::now();
-        Storage::disk('local')->put('file.txt', $mytime->toDateTimeString());
-        return Response::json($mytime->toDateTimeString(), 403);
+        Storage::disk('local')->put('file.json', json_encode($request->all()));
+        return Response::json($request->all(), 403);
     }
 
     /**
