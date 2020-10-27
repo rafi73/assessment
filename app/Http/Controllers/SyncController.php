@@ -58,7 +58,7 @@ class SyncController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function test()
+    public function test(Request $request)
     {
         $mytime = Carbon::now();
         Storage::disk('local')->put('file.txt', $mytime->toDateTimeString());
