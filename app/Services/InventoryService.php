@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\SyncInterface;
 use App\Exceptions\CredentialErrorException;
+use App\Models\Inventory;
 use Slince;
 
 class InventoryService implements SyncInterface
@@ -41,9 +42,19 @@ class InventoryService implements SyncInterface
      * @param array $request
      * @return \App\Product
      */
-    public function create(array $request)
+    public function create(array $request): bool
     {
+        $master = $request['master'];
+        $slave = $request['slave']['product'];
 
+        for ($i = 0; $i < count($master['variants']); $i++) {
+            $inventory = new Inventory;
+            $inventory->master_store_inventory_item_id = $master['variants'][$i]['inventory_item_id'];
+            $inventory->slave_store_inventory_item_id = $slave['variants'][$i]['inventory_item_id'];
+            $inventory->save();
+        }
+
+        return true;
     }
 
     /**

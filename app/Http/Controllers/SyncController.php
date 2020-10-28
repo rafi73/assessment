@@ -45,8 +45,8 @@ class SyncController extends Controller
     public function productCreate(Request $request)
     {
         $product = $this->productService->create($request->all());
-        $mytime = Carbon::now();
-        Storage::disk('local')->put($mytime->toDateTimeString() . 'product-create.json', json_encode($request->all()));
+        $product = $this->inventoryService->create(['master' => $request->all(), 'slave' => $product]);
+        Storage::disk('local')->put(Carbon::now()->format('Y-m-d~His') . 'product-create.json', json_encode($request->all()));
         return Response::json($product, 200);
     }
 
@@ -76,8 +76,7 @@ class SyncController extends Controller
         // }
 
         $product = $this->productService->update($request->all());
-        $mytime = Carbon::now();
-        Storage::disk('local')->put($mytime->toDateTimeString() . 'product-update.json', json_encode($request->all()));
+        Storage::disk('local')->put(Carbon::now()->format('Y-m-d~His') . 'product-update.json', json_encode($request->all()));
         return Response::json($product, 200);
     }
 
@@ -138,8 +137,7 @@ class SyncController extends Controller
      */
     public function inventoryLevelUpdate(Request $request)
     {
-        $mytime = Carbon::now();
-        Storage::disk('local')->put($mytime->toDateTimeString() . 'inventory-level.json', json_encode($request->all()));
+        Storage::disk('local')->put(Carbon::now()->format('Y-m-d~His') . 'inventory-level.json', json_encode($request->all()));
         $product = $this->inventoryService->update($request->all());
         return Response::json($product, 200);
     }
