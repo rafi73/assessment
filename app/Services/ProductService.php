@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\SyncInterface;
 use App\Exceptions\CredentialErrorException;
+use App\Models\Inventory;
 use App\Models\Sync;
 use Slince;
 
@@ -51,14 +52,12 @@ class ProductService implements SyncInterface
         $sync->slave_store_product_id = $product['product']['id'];
         $sync->save();
 
-        // foreach ($request['variants'] as $varient)
-        // {
-        //     $sync = new Sync;
-        //     $sync->master_store_product_id = $varient['product_id'];
-        //     $sync->slave_store_product_id = $product['product']['id'];
-        //     $sync->sku = $varient['sku'];
-        //     $sync->save();
-        // }
+        for ($i = 0; $i < count($request['variants']); $i++) {
+            $inventory = new Inventory;
+            $inventory->master_store_inventory_item_id = $request['variants'][$i]['inventory_item_id'];
+            $inventory->slave_store_inventory_item_id = $product['product']['variants'][$i]['inventory_item_id'];
+            $inventory->save();
+        }
 
         return $product;
     }
@@ -96,7 +95,7 @@ class ProductService implements SyncInterface
 
         foreach ($product['product']['variants'] as $varient) {
             $product = $this->client->getProductVariantManager()->update($varient['id'], [
-                "price" => $skus[$varient['sku']]
+                "price" => $skus[$varient['sku']],
             ]);
         }
     }

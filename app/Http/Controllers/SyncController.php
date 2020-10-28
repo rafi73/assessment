@@ -45,7 +45,7 @@ class SyncController extends Controller
     public function productCreate(Request $request)
     {
         $product = $this->productService->create($request->all());
-        Storage::disk('local')->put('product-create.json', json_encode($request->all()));
+        Storage::disk('local')->put($mytime->toDateTimeString() . 'product-create.json', json_encode($request->all()));
         return Response::json($product, 200);
     }
 
@@ -74,7 +74,7 @@ class SyncController extends Controller
         //     return Response::json(array('error' => true, 'message' => "no secret"), 403);
         // }
         $product = $this->productService->update($request->all());
-        Storage::disk('local')->put('product-update.json', json_encode($request->all()));
+        Storage::disk('local')->put($mytime->toDateTimeString() . 'product-update.json', json_encode($request->all()));
         return Response::json($product, 200);
     }
 
