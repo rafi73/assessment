@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CredentialErrorException;
 use App\Models\sync;
 use App\Services\InventoryService;
 use App\Services\ProductService;
@@ -44,9 +45,12 @@ class SyncController extends Controller
      */
     public function productCreate(Request $request)
     {
-        $product = $this->productService->create($request->all());
-        $product = $this->inventoryService->create(['master' => $request->all(), 'slave' => $product]);
         Storage::disk('local')->put(Carbon::now()->format('Y-m-d~His') . 'product-create.json', json_encode($request->all()));
+        $product = $this->productService->create($request->all());
+        $result = $this->inventoryService->create(['master' => $request->all(), 'slave' => $product]);
+        if (!$result) {
+            throw new CredentialErrorException($exception);
+        }
         return Response::json($product, 200);
     }
 

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Contracts\SyncInterface;
 use App\Exceptions\CredentialErrorException;
-use App\Models\Sync;
+use App\Models\Product;
 use Slince;
 
 class ProductService implements SyncInterface
@@ -44,14 +44,14 @@ class ProductService implements SyncInterface
      */
     public function create(array $request)
     {
-        $product = $this->client->post('products', ['product' => $request]);
+        $slaveProduct = $this->client->post('products', ['product' => $request]);
 
-        $sync = new Sync;
-        $sync->master_store_product_id = $request['id'];
-        $sync->slave_store_product_id = $product['product']['id'];
-        $sync->save();
+        $product = new Product;
+        $product->master_store_product_id = $request['id'];
+        $product->slave_store_product_id = $slaveProduct['product']['id'];
+        $product->save();
 
-        return $product;
+        return $slaveProduct;
     }
 
     /**
@@ -75,7 +75,7 @@ class ProductService implements SyncInterface
      * @throws \App\Exceptions\ProductService\ProductOwnerMismatchedException
      * @return \App\Product
      */
-    public function update(array $request)
+    public function update(array $request): array
     {
         $skus = [];
         foreach ($request['variants'] as $varient) {
@@ -83,13 +83,15 @@ class ProductService implements SyncInterface
         }
 
         $sync = Sync::where('master_store_product_id', $varient['product_id'])->firstOrFail();
-        $product = $this->client->get('products/' . $sync->slave_store_product_id);
+        $slaveProduct = $this->client->get('products/' . $sync->slave_store_product_id);
 
-        foreach ($product['product']['variants'] as $varient) {
-            $product = $this->client->getProductVariantManager()->update($varient['id'], [
+        foreach ($slaveProduct['product']['variants'] as $varient) {
+            $slaveProduct = $this->client->getProductVariantManager()->update($varient['id'], [
                 "price" => $skus[$varient['sku']],
             ]);
         }
+
+        return $slaveProduct;
     }
 
     /**

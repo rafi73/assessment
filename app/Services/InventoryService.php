@@ -40,12 +40,16 @@ class InventoryService implements SyncInterface
      * Create & store a new Product
      *
      * @param array $request
-     * @return \App\Product
+     * @return bool
      */
     public function create(array $request): bool
     {
         $master = $request['master'];
         $slave = $request['slave']['product'];
+
+        if (count($master['variants']) != count($master['variants'])) {
+            throw new CredentialErrorException('Master and slave store data count mismatched', 500);
+        }
 
         for ($i = 0; $i < count($master['variants']); $i++) {
             $inventory = new Inventory;
@@ -80,8 +84,15 @@ class InventoryService implements SyncInterface
      */
     public function update(array $request)
     {
-        dd($request);
-        return $product;
+        
+        $inventory = Inventory::where('master_store_inventory_item_id', $request['inventory_item_id'])->first();
+        //dd($inventory);
+        $slaveProduct = $this->client->getInventoryLevelManager()->adjust([
+            'inventory_item_id' => $inventory->slave_store_product_id,
+            'available_adjustment' => $request['available']
+        ]);
+        
+        return $slaveProduct;
     }
 
     /**
