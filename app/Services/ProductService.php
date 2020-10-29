@@ -82,8 +82,8 @@ class ProductService implements SyncInterface
             $skus[$varient['sku']] = $varient['price'];
         }
 
-        $sync = Sync::where('master_store_product_id', $varient['product_id'])->firstOrFail();
-        $slaveProduct = $this->client->get('products/' . $sync->slave_store_product_id);
+        $product = Product::where('master_store_product_id', $varient['product_id'])->firstOrFail();
+        $slaveProduct = $this->client->get('products/' . $product->slave_store_product_id);
 
         foreach ($slaveProduct['product']['variants'] as $varient) {
             $slaveProduct = $this->client->getProductVariantManager()->update($varient['id'], [
